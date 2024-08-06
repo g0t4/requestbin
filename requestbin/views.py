@@ -1,7 +1,7 @@
 import urllib
 from flask import session, redirect, url_for, escape, request, render_template, make_response
 
-from requestbin import app, db
+from requestbin import app, config, db
 
 def update_recent_bins(name):
     if 'recent' not in session:
@@ -31,7 +31,8 @@ def home():
     return render_template (
                 'home.html', 
                 recent=expand_recent_bins(),
-                base_url=request.scheme+'://'+request.host
+                base_url=request.scheme+'://'+request.host+config.CONTEXT_ROOT,
+                base_path=config.CONTEXT_ROOT
            )
 
 
@@ -48,7 +49,9 @@ def bin(name):
         update_recent_bins(name)
         return render_template('bin.html',
             bin=bin,
-            base_url=request.scheme+'://'+request.host)
+            base_url=request.scheme+'://'+request.host+config.CONTEXT_ROOT,
+                base_path=config.CONTEXT_ROOT
+        )
     else:
         db.create_request(bin, request)
         resp = make_response("ok\n")
@@ -63,6 +66,7 @@ def docs(name):
         return render_template('doc.html',
                 content=doc['content'],
                 title=doc['title'],
-                recent=expand_recent_bins())
+                recent=expand_recent_bins(),
+                base_path=config.CONTEXT_ROOT)
     else:
         return "Not found", 404

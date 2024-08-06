@@ -28,6 +28,8 @@ REDIS_PREFIX = "requestbin"
 
 BUGSNAG_KEY = ""
 
+CONTEXT_ROOT = os.environ.get('CONTEXT_ROOT', '/')
+
 if REALM == 'prod':
     DEBUG = False
     ROOT_URL = "http://requestb.in"
